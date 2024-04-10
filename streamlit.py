@@ -59,7 +59,7 @@ with col2:
 
 #Tahmin ########################################################
 
-if prediction_tab == "Model":
+if prediction_tab.button("Model"):
     model_cont = st.container()
     model_cont.subheader("Tahmin")
     col1, col2, col3, col4, col5 = model_cont.columns(5)
@@ -72,10 +72,14 @@ if prediction_tab == "Model":
     selected_CH2O = col5.number_input("Günlük Su Tüketimi (ml)", min_value=0, max_value=10000, value=2000, step=100)
 
     # Tahmini hesapla ve göster
-    if st.button("Tahminle"):
+    if col6.button("Tahminle"):
         prediction = predict_obesity_risk(selected_age, selected_gender, selected_weight, selected_height, selected_CH2O)
-        st.write("Tahmin Edilen Obezite Riski:", prediction)
-        st.balloons()
+        col6.metric(label="Tahmin Edilen Obezite Riski", value=prediction)
+        st.balloons()] model sekmesi istemiyorum ayrıca ve şu hata geldi [File "/home/adminuser/venv/lib/python3.11/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 584, in _run_script
+    exec(code, module.__dict__)
+File "/mount/src/multi-class-prediction-of-obesity-risk/streamlit.py", line 75, in <module>
+    if col6.button("Tahminle"):
+       ^^^^
 
 
 
