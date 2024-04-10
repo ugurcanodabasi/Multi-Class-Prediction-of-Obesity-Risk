@@ -59,7 +59,7 @@ with col2:
 
 #Tahmin ########################################################
 
-if prediction_tab.button("Model"):
+if prediction_tab == "Model":
     model_cont = st.container()
     model_cont.subheader("Tahmin")
     col1, col2, col3, col4, col5 = model_cont.columns(5)
