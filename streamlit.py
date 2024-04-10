@@ -75,12 +75,7 @@ if prediction_tab.button("Model"):
     if col6.button("Tahminle"):
         prediction = predict_obesity_risk(selected_age, selected_gender, selected_weight, selected_height, selected_CH2O)
         col6.metric(label="Tahmin Edilen Obezite Riski", value=prediction)
-        st.balloons()] model sekmesi istemiyorum ayrıca ve şu hata geldi [File "/home/adminuser/venv/lib/python3.11/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 584, in _run_script
-    exec(code, module.__dict__)
-File "/mount/src/multi-class-prediction-of-obesity-risk/streamlit.py", line 75, in <module>
-    if col6.button("Tahminle"):
-       ^^^^
-
+        st.balloons()
 
 
 
