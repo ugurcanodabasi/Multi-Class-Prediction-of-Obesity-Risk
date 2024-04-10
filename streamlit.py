@@ -61,21 +61,21 @@ with col2:
 
 if prediction_tab.button("Model"):
     model_cont = st.container()
-    model_cont.subheader("Tahmin")
-    col1, col2, col3, col4, col5 = model_cont.columns(5)
-    
-    # Kullanıcıdan bilgileri al
-    selected_age = col1.number_input("Yaş", min_value=0, max_value=150, value=30, step=1)
-    selected_gender = col2.selectbox("Cinsiyet", ["Erkek", "Kadın"])
-    selected_weight = col3.number_input("Kilo (kg)", min_value=20, max_value=500, value=70, step=1)
-    selected_height = col4.number_input("Boy (cm)", min_value=50, max_value=300, value=170, step=1)
-    selected_CH2O = col5.number_input("Günlük Su Tüketimi (ml)", min_value=0, max_value=10000, value=2000, step=100)
+    with model_cont:
+        st.subheader("Tahmin")
 
-    # Tahmini hesapla ve göster
-    if col6.button("Tahminle"):
-        prediction = predict_obesity_risk(selected_age, selected_gender, selected_weight, selected_height, selected_CH2O)
-        col6.metric(label="Tahmin Edilen Obezite Riski", value=prediction)
-        st.balloons()
+        # Kullanıcıdan bilgileri al
+        selected_age = st.number_input("Yaş", min_value=0, max_value=150, value=30, step=1)
+        selected_gender = st.radio("Cinsiyet", ["Erkek", "Kadın"])
+        selected_weight = st.number_input("Kilo (kg)", min_value=20, max_value=500, value=70, step=1)
+        selected_height = st.number_input("Boy (cm)", min_value=50, max_value=300, value=170, step=1)
+        selected_CH2O = st.number_input("Günlük Su Tüketimi (ml)", min_value=0, max_value=10000, value=2000, step=100)
+
+        # Tahmini hesapla ve göster
+        if st.button("Tahminle"):
+            prediction = predict_obesity_risk(selected_age, selected_gender, selected_weight, selected_height, selected_CH2O)
+            st.write("Tahmin Edilen Obezite Riski:", prediction)
+            st.balloons()
 
 
 
