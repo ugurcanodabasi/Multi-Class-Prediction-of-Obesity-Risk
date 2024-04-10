@@ -50,12 +50,9 @@ if chart_tab == "Grafikler":
         st.header("Shap")
         st.image("SHAP.png")
 
-
-#Tahmin ########################################################
-
 if prediction_tab == "Model":
-
     if st.session_state['tahmin']:
+        model_cont = prediction_tab.container()
         model_cont.subheader("Tahmin")
         col1, col2, col3 = model_cont.columns(3)
         selected_age = col1.number_input("Yaş")
@@ -69,5 +66,3 @@ if prediction_tab == "Model":
                                        selected_CH2O)
             col6.metric(label="Tahmin Edilen Obezite Riski", value=(prediction[0]))
             st.balloons()
-
-
