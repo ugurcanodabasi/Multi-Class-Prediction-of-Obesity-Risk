@@ -41,16 +41,17 @@ if main_tab == "Ana Sayfa":
 
 # Grafikler ########################################################
 
+# Grafikler
 if chart_tab == "Grafikler":
-col1, col2 = st.columns(2)
+    col1, col2 = chart_tab.columns(2)
 
-with col1:
-   st.header("Korelasyon Matrisi")
-   st.image("korelasyon.png")
+    with col1:
+        st.header("Korelasyon Matrisi")
+        st.image("korelasyon.png")
 
-with col2:
-   st.header("Shap")
-   st.image("SHAP.png")
+    with col2:
+        st.header("SHAP")
+        st.image("SHAP.png")
 
 #Tahmin ########################################################
 if prediction_tab == "Model":
