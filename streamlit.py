@@ -45,19 +45,17 @@ Kullanıcılar, arayüz üzerinden bireysel özellikleri girebilir ve modele bes
 
 # Grafikler ########################################################
 
-graph_cont = tab3.container()
-# Grafik 1
-graph_cont.header("Veri Setinin Görselleştirilmesi")
-exp1 = graph_cont.expander("Korelasyon Matrisi")
-with exp1:
-    image = Image.open("korelasyon.png")
-    st.image(image, caption='Korelasyon Matrisi', use_column_width=True)
+import streamlit as st
 
-# Grafik 2
-exp2 = graph_cont.expander("Shap")
-with exp1:
-    image = Image.open("SHAP.png")
-    st.image(image, caption='SHAP', use_column_width=True)
+col1, col2 = st.columns(2)
+
+with col1:
+   st.header("Korelasyon Matrisi)
+   st.image("korelasyon.png")
+
+with col2:
+   st.header("Shap")
+   st.image("SHAP.png")
 
 #Tahmin ########################################################
 
