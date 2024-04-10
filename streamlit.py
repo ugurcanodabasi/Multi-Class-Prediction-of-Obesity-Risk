@@ -72,9 +72,9 @@ if prediction_tab.button("Model"):
     selected_CH2O = col5.number_input("Günlük Su Tüketimi (ml)", min_value=0, max_value=10000, value=2000, step=100)
 
     # Tahmini hesapla ve göster
-    if col6.button("Tahminle"):
+    if st.button("Tahminle"):
         prediction = predict_obesity_risk(selected_age, selected_gender, selected_weight, selected_height, selected_CH2O)
-        col6.metric(label="Tahmin Edilen Obezite Riski", value=prediction)
+        st.write("Tahmin Edilen Obezite Riski:", prediction)
         st.balloons()
 
 
