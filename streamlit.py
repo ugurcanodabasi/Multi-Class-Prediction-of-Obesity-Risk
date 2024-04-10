@@ -7,7 +7,7 @@ import pickle
 # Özel bir önbellek yöneticisi tanımlama
 custom_cache = st.cache(allow_output_mutation=True, persist=True, suppress_st_warning=True, show_spinner=False)
 
-st.set_page_config(layout="wide", page_title="Obezite Riskinin Çok Sınıflı Tahmini", page_icon="🎷")
+st.set_page_config(layout = "wide", page_title="Obezite Riskinin Çok Sınıflı Tahmini", page_icon="🎷")
 
 @st.cache
 def get_data():
@@ -20,7 +20,7 @@ def get_pipeline():
     pipeline = joblib.load('lgbm_model_final.pkl')
     return pipeline
 
-main_tab, chart_tab, prediction_tab = st.columns(3)
+main_tab, chart_tab, prediction_tab = st.tabs(["Ana Sayfa", "Grafikler", "Model"])
 
 # Ana Sayfa ########################################################
 if main_tab.button("Ana Sayfa"):
