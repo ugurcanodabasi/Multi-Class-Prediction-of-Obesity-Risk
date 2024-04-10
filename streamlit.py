@@ -61,4 +61,7 @@ if prediction_tab == "Model":
         selected_height = col4.number_input("Boy")
         selected_CH2O = col5.number_input("Günlük su tüketimi")
 
-        if col6.button("Tahmin
+        if col6.button("Tahminle"):
+            prediction = predict_model(df, selected_age, selected_gender, selected_weight, selected_height, selected_CH2O)
+            col6.metric(label="Tahmin Edilen Obezite Riski", value=(prediction[0]))
+            st.balloons()
