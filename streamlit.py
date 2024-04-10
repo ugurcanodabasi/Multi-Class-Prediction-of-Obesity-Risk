@@ -59,19 +59,20 @@ with col2:
 
 #Tahmin ########################################################
 
-  # Tahmin
+if __name__ == '__main__':
     if st.session_state['tahmin']:
         model_cont.subheader("Tahmin")
         col1, col2, col3 = model_cont.columns(3)
-        selected_age = col1.number_input("Yas")
+        selected_age = col1.number_input("Yaş")
         selected_gender = col2.number_input("Cinsiyet")
-        selected_weight = col2.number_input("Boy")
-        selected_height = col2.number_input("Kilo")
-        selected_CH2O = col2.number_input("Günlük su tüketimi")
-        if col1.button("Tahminle"):
-            prediction = predict_model(df, selected_age, selected_weight, selected_height,selected_CH2O)
-            col3.metric(label="Tahmin Edilen Obezite riski", value=(prediction[0]))
+        selected_weight = col3.number_input("Kilo")
+        selected_height = col4.number_input("Boy")
+        selected_CH2O = col5.number_input("Günlük su tüketimi")
+        
+        if col6.button("Tahminle"):
+            prediction = predict_model(df, selected_age, selected_gender, selected_weight, selected_height, selected_CH2O)
+            col6.metric(label="Tahmin Edilen Obezite Riski", value=(prediction[0]))
             st.balloons()
 
-if __name__ == '__main__':
-    main()
+
+
