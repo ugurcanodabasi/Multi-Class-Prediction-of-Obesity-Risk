@@ -1,3 +1,27 @@
+import streamlit as st
+import pandas as pd
+import joblib
+import numpy as np
+import pickle
+
+# Özel bir önbellek yöneticisi tanımlama
+custom_cache = st.cache(allow_output_mutation=True, persist=True, suppress_st_warning=True, show_spinner=False)
+
+st.set_page_config(layout = "wide", page_title="Obezite Riskinin Çok Sınıflı Tahmini", page_icon="🎷")
+
+@st.cache
+def get_data():
+    dataframe = pd.read_csv('predicted_obesity_levels.csv')
+    return dataframe
+
+# Modeli yükle
+@st.cache
+def get_pipeline():
+    pipeline = joblib.load('lgbm_model_final.pkl')
+    return pipeline
+
+main_tab, chart_tab, prediction_tab = st.tabs(["Ana Sayfa", "Grafikler", "Model"])
+
 if main_tab == "Ana Sayfa":
     left_col, right_col = main_tab.columns(2)
 
@@ -45,4 +69,5 @@ if prediction_tab == "Model":
                                        selected_CH2O)
             col6.metric(label="Tahmin Edilen Obezite Riski", value=(prediction[0]))
             st.balloons()
+
 
