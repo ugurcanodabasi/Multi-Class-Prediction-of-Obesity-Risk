@@ -7,7 +7,7 @@ import pickle
 # Özel bir önbellek yöneticisi tanımlama
 custom_cache = st.cache(allow_output_mutation=True, persist=True, suppress_st_warning=True, show_spinner=False)
 
-st.set_page_config(layout = "wide", page_title="Obezite Riskinin Çok Sınıflı Tahmini", page_icon="🎷")
+st.set_page_config(layout="wide", page_title="Obezite Riskinin Çok Sınıflı Tahmini", page_icon="🎷")
 
 @st.cache
 def get_data():
@@ -20,10 +20,10 @@ def get_pipeline():
     pipeline = joblib.load('lgbm_model_final.pkl')
     return pipeline
 
-main_tab, chart_tab, prediction_tab = st.tabs(["Ana Sayfa", "Grafikler", "Model"])
+main_tab, chart_tab, prediction_tab = st.columns(3)
 
 # Ana Sayfa ########################################################
-if main_tab("Ana Sayfa"):
+if main_tab.button("Ana Sayfa"):
     left_col, right_col = st.columns(2)
 
     left_col.write("""Bu projenin amacı, bireylerde kardiyovasküler hastalıklarla ilişkili obezite riskini tahmin etmek için çeşitli faktörleri kullanmaktır. Kardiyovasküler hastalıklar, dünya genelinde sağlık sorunlarının önde gelen nedenlerinden biri olarak kabul edilmektedir. Bu hastalıkların birçoğu obezite ile doğrudan ilişkilidir. Bu nedenle, obeziteyi öngörmek ve bu konuda farkındalık yaratmak önemlidir.""")
@@ -39,7 +39,7 @@ if main_tab("Ana Sayfa"):
     Kullanıcılar, arayüz üzerinden bireysel özellikleri girebilir ve modele besleyerek obezite risk tahminini alabilirler. Bu tahminler, bireylerin normal kilolu, aşırı kilolu, obez veya aşırı obez olma riskini belirtir.""")
 
 # Grafikler ########################################################
-if chart_tab("Grafikler"):
+if chart_tab.button("Grafikler"):
     col1, col2 = st.columns(2)
 
     with col1:
@@ -51,7 +51,7 @@ if chart_tab("Grafikler"):
         st.image("SHAP.png")
 
 # Tahmin ########################################################
-if prediction_tab("Model"):
+if prediction_tab.button("Model"):
     model_cont = st.container()
     model_cont.subheader("Tahmin")
     col1, col2, col3 = model_cont.columns(3)
@@ -65,4 +65,3 @@ if prediction_tab("Model"):
         prediction = predict_model(df, selected_age, selected_gender, selected_weight, selected_height, selected_CH2O)
         col6.metric(label="Tahmin Edilen Obezite Riski", value=(prediction[0]))
         st.balloons()
-
