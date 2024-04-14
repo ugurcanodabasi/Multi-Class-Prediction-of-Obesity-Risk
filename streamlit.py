@@ -1,77 +1,46 @@
 import streamlit as st
 import pandas as pd
-import pickle
-import lightgbm as lgb
+import joblib
 
-# Özel bir önbellek yöneticisi tanımlama
-custom_cache = st.cache(allow_output_mutation=True, persist=True, suppress_st_warning=True, show_spinner=False)
+# Modeli joblib ile yükle
+model_path = 'lgbm_model_final.pkl'
+model = joblib.load(model_path)
 
-st.set_page_config(layout = "wide", page_title="Obezite Riskinin Çok Sınıflı Tahmini", page_icon="🎷")
+# Sidebar - Kullanıcı girdileri
+st.sidebar.header('Kullanıcı Girdi Özellikleri')
 
-@st.cache
-def get_data():
-    dataframe = pd.read_csv('predicted_obesity_levels.csv')
-    return dataframe
+def user_input_features():
+    age = st.sidebar.number_input('Yaş', min_value=1, max_value=100, value=25)
+    height = st.sidebar.number_input('Boy (cm)', min_value=100, max_value=250, value=170)
+    weight = st.sidebar.number_input('Kilo (kg)', min_value=30, max_value=200, value=70)
+    daily_water_intake = st.sidebar.number_input('Günlük Su Tüketimi (litre)', min_value=0.0, max_value=10.0, value=2.0)
+    gender = st.sidebar.selectbox('Cinsiyet', ('Erkek', 'Kadın'))
+    data = {'age': [age],
+            'height': [height],
+            'weight': [weight],
+            'daily_water_intake': [daily_water_intake],
+            'gender': [gender]}
+    features = pd.DataFrame(data)
+    return features
 
-# Modeli yükle
-@st.cache
-def get_pipeline():
-    pipeline = joblib.load('lgbm_model_final.pkl')
-    return pipeline
+input_df = user_input_features()
 
-main_tab, chart_tab, prediction_tab = st.tabs(["Ana Sayfa", "Grafikler", "Model"])
+# Main Page
+st.write("""
+# Basit Obezite Tahmin Uygulaması
+Bu uygulama, LightGBM modeli kullanarak obezite seviyenizi tahmin eder!
+""")
 
-if main_tab == "Ana Sayfa":
-    left_col, right_col = main_tab.columns(2)
+# Tahminleri göster
+st.subheader('Kullanıcı Girdi Özellikleri')
+st.write(input_df)
 
-    left_col.write("""Bu projenin amacı, bireylerde kardiyovasküler hastalıklarla ilişkili obezite riskini tahmin etmek için çeşitli faktörleri kullanmaktır. Kardiyovasküler hastalıklar, dünya genelinde sağlık sorunlarının önde gelen nedenlerinden biri olarak kabul edilmektedir. Bu hastalıkların birçoğu obezite ile doğrudan ilişkilidir. Bu nedenle, obeziteyi öngörmek ve bu konuda farkındalık yaratmak önemlidir.""")
+st.subheader('Tahmin Edilen Obezite Seviyesi')
+prediction = model.predict(input_df)
+st.write(prediction[0])
 
-    left_col.write("""Veri Seti ve Hedef
-    Bu projede kullanılan veri seti, bireylerin demografik bilgilerini, yaşam tarzı alışkanlıklarını ve fizyolojik ölçümlerini içerir. Ölçümler arasında boy, kilo, günlük su tüketimi, fiziksel aktivite düzeyi gibi faktörler bulunmaktadır. Veri setindeki her bir satır, bir bireyi temsil eder ve bu bireylerin obezite durumları "NObeyesdad" sütununda belirtilmiştir.""")
-
-    #TAVSİYE:Veri setinin bir kısmı eklenebilir
-
-    right_col.write("""Kullanılan Algoritmalar
-    Bu proje, LightGBM makine öğrenimi modeli kullanmaktadır. LightGBM, yüksek performanslı ve hızlı bir gradyan arttırma (gradient boosting) algoritmasıdır. Bu algoritma, veri setindeki örüntüleri öğrenerek ve karmaşık ilişkileri modelleyerek obezite riskini tahmin etmek için kullanılır.""")
-
-    right_col.write("""Uygulama: Streamlit ile Model Tahmini
-    Bu projede, geliştirilen modelin kullanıcı dostu bir arayüz ile sunulması amaçlanmıştır. Streamlit adlı Python kütüphanesi, basit ve etkileşimli web uygulamaları oluşturmayı sağlar. Bu projede, geliştirilen LightGBM modeli Streamlit arayüzü ile entegre edilmiştir.
-    Kullanıcılar, arayüz üzerinden bireysel özellikleri girebilir ve modele besleyerek obezite risk tahminini alabilirler. Bu tahminler, bireylerin normal kilolu, aşırı kilolu, obez veya aşırı obez olma riskini belirtir.""")
-
-if chart_tab == "Grafikler":
-    col1, col2 = chart_tab.columns(2)
-
-    with col1:
-        st.header("Korelasyon Matrisi")
-        st.image("korelasyon.png")
-
-    with col2:
-        st.header("Shap")
-        st.image("SHAP.png")
-        
-if prediction_tab == "Model":
-    model_cont = st.container()
-    model_cont.subheader("Tahmin")
-    col1, col2, col3, col4, col5 = model_cont.columns(5)
-    
-    # Kullanıcıdan bilgileri al
-    selected_age = col1.number_input("Yaş", min_value=0, max_value=150, value=30, step=1)
-    selected_gender = col2.selectbox("Cinsiyet", ["Erkek", "Kadın"])
-    selected_weight = col3.number_input("Kilo (kg)", min_value=20, max_value=500, value=70, step=1)
-    selected_height = col4.number_input("Boy (cm)", min_value=50, max_value=300, value=170, step=1)
-    selected_CH2O = col5.number_input("Günlük Su Tüketimi (ml)", min_value=0, max_value=10000, value=2000, step=100)
-
-    # Tahmini hesapla ve göster
-    if st.button("Tahminle"):
-        input_df = pd.DataFrame({
-            'age': [selected_age],
-            'gender': [selected_gender],
-            'weight': [selected_weight],
-            'height': [selected_height],
-            'daily_water_intake': [selected_CH2O]
-        })
-        
-        prediction = predict_obesity_risk(input_df)
-        
-        col6.metric(label="Tahmin Edilen Obezite Riski", value=prediction)
-        st.balloons()
+# CSV dosyasını yükleme ve görselleştirme
+st.subheader('Tahmin Edilen Obezite Seviyeleri (CSV)')
+data_path = 'predicted_obesity_levels.csv'
+data = pd.read_csv(data_path)
+st.write(data)
