@@ -59,24 +59,29 @@ with col2:
 
 #Tahmin ########################################################
 
-if prediction_tab.button("Model"):
-    model_cont = st.container()
-    with model_cont:
-        st.subheader("Tahmin")
-
-        # Kullanıcıdan bilgileri al
-        selected_age = st.number_input("Yaş", min_value=0, max_value=150, value=30, step=1)
-        selected_gender = st.radio("Cinsiyet", ["Erkek", "Kadın"])
-        selected_weight = st.number_input("Kilo (kg)", min_value=20, max_value=500, value=70, step=1)
-        selected_height = st.number_input("Boy (cm)", min_value=50, max_value=300, value=170, step=1)
-        selected_CH2O = st.number_input("Günlük Su Tüketimi (ml)", min_value=0, max_value=10000, value=2000, step=100)
-
-        # Tahmini hesapla ve göster
-        if st.button("Tahminle"):
-            prediction = predict_obesity_risk(selected_age, selected_gender, selected_weight, selected_height, selected_CH2O)
-            st.write("Tahmin Edilen Obezite Riski:", prediction)
-            st.balloons()
-
+@st.cache
+def predict_obesity_risk(age, gender, weight, height, ch2o):
+    # Modelin yüklenmesi
+    model = get_pipeline()  # Bu, modelinizi yüklemek için daha önce tanımladığınız fonksiyon
+    
+    # Girdi verilerini bir DataFrame'e dönüştürme
+    input_data = pd.DataFrame({
+        'Age': [age],
+        'Gender': [gender],
+        'Weight': [weight],
+        'Height': [height],
+        'CH2O': [ch2o]
+    })
+    
+    # Cinsiyet gibi kategorik değişkenler için dönüşüm yapılması gerekebilir
+    # Örneğin, model eğitimi sırasında 'Gender' 'Male' ve 'Female' olarak kodlanmışsa:
+    input_data['Gender'] = input_data['Gender'].map({'Erkek': 'Male', 'Kadın': 'Female'})
+    
+    # Model ile tahmin yapma
+    prediction = model.predict(input_data)
+    
+    # Tahmin sonucunu döndürme
+    return prediction[0]  # Varsayılan olarak ilk tahmini döndürür
 
 
 
