@@ -58,7 +58,30 @@ with col2:
    st.image("SHAP.png")
 
 #Tahmin ########################################################
-
+@st.cache
+def predict_obesity_risk(age, gender, weight, height, ch2o):
+    # Modelin yüklenmesi
+    model = get_pipeline()  # Bu, modelinizi yüklemek için daha önce tanımladığınız fonksiyon
+    
+    # Girdi verilerini bir DataFrame'e dönüştürme
+    input_data = pd.DataFrame({
+        'Age': [age],
+        'Gender': [gender],
+        'Weight': [weight],
+        'Height': [height],
+        'CH2O': [ch2o]
+    })
+    
+    # Cinsiyet gibi kategorik değişkenler için dönüşüm yapılması gerekebilir
+    # Örneğin, model eğitimi sırasında 'Gender' 'Male' ve 'Female' olarak kodlanmışsa:
+    input_data['Gender'] = input_data['Gender'].map({'Erkek': 'Male', 'Kadın': 'Female'})
+    
+    # Model ile tahmin yapma
+    prediction = model.predict(input_data)
+    
+    # Tahmin sonucunu döndürme
+    return prediction[0]  # Varsayılan olarak ilk tahmini döndürür
+    
 # if prediction_tab.button("Model"):  # Bu satırı yorum olarak bırakın
 model_cont = st.container()
 with model_cont:
