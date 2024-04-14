@@ -15,6 +15,7 @@ def user_input_features():
     weight = st.sidebar.number_input('Kilo (kg)', min_value=30, max_value=200, value=70)
     daily_water_intake = st.sidebar.number_input('Günlük Su Tüketimi (litre)', min_value=0.0, max_value=10.0, value=2.0)
     gender = st.sidebar.selectbox('Cinsiyet', ('Erkek', 'Kadın'))
+    gender = 0 if gender == 'Erkek' else 1
     data = {'age': [age],
             'height': [height],
             'weight': [weight],
