@@ -9,13 +9,13 @@ custom_cache = st.cache(allow_output_mutation=True, persist=True, suppress_st_wa
 
 st.set_page_config(layout = "wide", page_title="Obezite Riskinin Çok Sınıflı Tahmini", page_icon="🎷")
 
-@st.cache
+@st.cache_data
 def get_data():
     dataframe = pd.read_csv('predicted_obesity_levels.csv')
     return dataframe
 
 # Modeli yükle
-@st.cache
+@st.cache_data
 def get_pipeline():
     pipeline = joblib.load('lgbm_model_final.pkl')
     return pipeline
